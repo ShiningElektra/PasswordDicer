@@ -2,32 +2,23 @@
 // import { printNoAccess, printWelcomeMessage } from "./messages";
 // import { askForCredentials } from "./questions";
 
+// Datenbankanbindung -Anfang-
 import { MongoClient } from "mongodb";
 import dotenv from "dotenv";
+import { closeDB, connectDB, getCollection } from "./db";
 dotenv.config();
 
 const run = async () => {
   const url = process.env.MONGODB_URL;
 
   try {
-    const client = await MongoClient.connect(url, {
-      useUnifiedTopology: true,
-    });
-    console.log("Connected to DB!");
-
-    const db = client.db("PasswordDicer-Elektra");
-
-    await db.collection("inventory").insertOne({
-      item: "canvas",
-      qty: 100,
-      tags: ["cotton"],
-      size: { h: 28, w: 35.5, uom: "cm" },
-    });
-
-    client.close();
+    await connectDB(url, "PasswordDicer-Elektra");
+    await getCollection("passwords");
+    await closeDB();
   } catch (error) {
     console.error(error);
   }
+  // Datenbankanbindung -Ende-
 
   // const run = async () => {
   //   printWelcomeMessage();
@@ -38,14 +29,14 @@ const run = async () => {
   //     return;
   //   }
 
-  //   // const action = await askForAction();
-  //   // switch (action.command) {
-  //   //   case "set":
-  //   //     handleSetPassword(action.passwordName);
-  //   //     break;
-  //   //   case "get":
-  //   //     handelGetPassword(action.passwordName);
-  //   //     break;
-  //   // }
+  // const action = await askForAction();
+  // switch (action.command) {
+  //   case "set":
+  //     handleSetPassword(action.passwordName);
+  //     break;
+  //   case "get":
+  //     handelGetPassword(action.passwordName);
+  //     break;
+  // }
 };
 run();
