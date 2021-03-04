@@ -5,7 +5,15 @@
 // Datenbankanbindung -Anfang-
 import { MongoClient } from "mongodb";
 import dotenv from "dotenv";
-import { closeDB, connectDB, getCollection } from "./db";
+import {
+  closeDB,
+  connectDB,
+  createPasswordDoc,
+  deleteValue,
+  getCollection,
+  readPasswordDoc,
+  updatePasswordDoc,
+} from "./db";
 dotenv.config();
 
 const run = async () => {
@@ -13,7 +21,21 @@ const run = async () => {
 
   try {
     await connectDB(url, "PasswordDicer-Elektra");
-    await getCollection("passwords");
+
+    // // Erstellen db Eintrags
+    // await createPasswordDoc({
+    //   name: "Elektra",
+    //   value: "1111",
+    // });
+
+    // // Auslesen des db Eintrags
+    // console.log(await readPasswordDoc("Elektra"));
+
+    // Eintrag updaten
+    await updatePasswordDoc("Elektra", { value: "1234" });
+    // Eintrag löschen
+    // console.log(await deleteValue("Elektra"));
+
     await closeDB();
   } catch (error) {
     console.error(error);
