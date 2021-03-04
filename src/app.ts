@@ -2,32 +2,45 @@
 // import { printNoAccess, printWelcomeMessage } from "./messages";
 // import { askForCredentials } from "./questions";
 
+// Datenbankanbindung -Anfang-
 import { MongoClient } from "mongodb";
 import dotenv from "dotenv";
+import {
+  closeDB,
+  connectDB,
+  createPasswordDoc,
+  deleteValue,
+  getCollection,
+  readPasswordDoc,
+  updatePasswordDoc,
+} from "./db";
 dotenv.config();
 
 const run = async () => {
   const url = process.env.MONGODB_URL;
 
   try {
-    const client = await MongoClient.connect(url, {
-      useUnifiedTopology: true,
-    });
-    console.log("Connected to DB!");
+    await connectDB(url, "PasswordDicer-Elektra");
 
-    const db = client.db("PasswordDicer-Elektra");
+    // // Erstellen db Eintrags
+    // await createPasswordDoc({
+    //   name: "Elektra",
+    //   value: "1111",
+    // });
 
-    await db.collection("inventory").insertOne({
-      item: "canvas",
-      qty: 100,
-      tags: ["cotton"],
-      size: { h: 28, w: 35.5, uom: "cm" },
-    });
+    // // Auslesen des db Eintrags
+    // console.log(await readPasswordDoc("Elektra"));
 
-    client.close();
+    // Eintrag updaten
+    await updatePasswordDoc("Elektra", { value: "1234" });
+    // Eintrag löschen
+    // console.log(await deleteValue("Elektra"));
+
+    await closeDB();
   } catch (error) {
     console.error(error);
   }
+  // Datenbankanbindung -Ende-
 
   // const run = async () => {
   //   printWelcomeMessage();
@@ -38,14 +51,14 @@ const run = async () => {
   //     return;
   //   }
 
-  //   // const action = await askForAction();
-  //   // switch (action.command) {
-  //   //   case "set":
-  //   //     handleSetPassword(action.passwordName);
-  //   //     break;
-  //   //   case "get":
-  //   //     handelGetPassword(action.passwordName);
-  //   //     break;
-  //   // }
+  // const action = await askForAction();
+  // switch (action.command) {
+  //   case "set":
+  //     handleSetPassword(action.passwordName);
+  //     break;
+  //   case "get":
+  //     handelGetPassword(action.passwordName);
+  //     break;
+  // }
 };
 run();
