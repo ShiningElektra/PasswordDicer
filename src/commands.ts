@@ -1,6 +1,6 @@
 import { printPassword, printPasswordSet } from "./messages";
 import { askForPasswordValue } from "./questions";
-import { readPasswordDoc, updatePasswordDoc, createPasswordDoc } from "./db";
+import { readPasswordDoc } from "./db";
 
 export const hasAccess = (masterPassword: string): boolean =>
   masterPassword === "4321";
@@ -8,9 +8,9 @@ export const hasAccess = (masterPassword: string): boolean =>
 export const handleSetPassword = async (
   passwordName: string
 ): Promise<void> => {
-  const passwordValue = await createPasswordDoc(passwordDoc);
+  const passwordValue = await askForPasswordValue();
   // ToDO use response.passwordValue to update password
-  printPasswordSet(response.passwordValue);
+  printPasswordSet(passwordName);
 };
 
 export const handleGetPassword = async (
