@@ -1,0 +1,14 @@
+### GET a password by name
+GET http://localhost:3333/api/passwords/Elektra
+
+### GET an unknown password by name
+GET http://localhost:3333/api/passwords/wifi182015
+
+### POST a new password
+POST http://localhost:3333/api/passwords
+Content-Type: application/json
+
+{
+    "name":"Wifi",
+    "value":"super-secret-password!!11"
+}
