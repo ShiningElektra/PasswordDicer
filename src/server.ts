@@ -13,7 +13,7 @@ connectDB(url, "PasswordDicer-Elektra");
 const server = http.createServer(async (request, response) => {
   if (request.url === "/") {
     response.statusCode = 200;
-    response.setHeader("Content-Type", "application/json");
+    response.setHeader("Content-Type", "text/html");
     response.end("<h1>Your Password Manager<h1>");
     return;
   }
