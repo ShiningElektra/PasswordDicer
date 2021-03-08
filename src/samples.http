@@ -12,3 +12,6 @@ Content-Type: application/json
     "name":"Wifi",
     "value":"super-secret-password!!11"
 }
+
+### DELETE a password by name
+DELETE http://localhost:3333/api/passwords/Elektra
