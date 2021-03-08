@@ -1,6 +1,6 @@
 import http from "http";
 import dotenv from "dotenv";
-import { connectDB, readPasswordDoc } from "./db";
+import { connectDB, deletePasswordDoc, readPasswordDoc } from "./db";
 
 dotenv.config();
 
@@ -12,7 +12,7 @@ connectDB(url, "PasswordDicer-Elektra");
 const server = http.createServer(async (request, response) => {
   if (request.url === "/") {
     response.statusCode = 200;
-    response.setHeader("Content-Type", "text/html");
+    response.setHeader("Content-Type", "application/json");
     response.end("<h1>Your Password Manager<h1>");
     return;
   }
@@ -32,6 +32,18 @@ const server = http.createServer(async (request, response) => {
     return;
   }
 
+  if (request.method === "DELETE") {
+    const passwordDoc = await readPasswordDoc(passwordName);
+    if (!passwordDoc) {
+      response.statusCode = 404;
+      response.end();
+      return;
+    }
+    response.statusCode = 200;
+    response.setHeader("Content-Type", "application/json");
+    response.end(JSON.stringify(await deletePasswordDoc(passwordName)));
+    return;
+  }
   response.end();
 });
 
